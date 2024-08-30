@@ -1,0 +1,104 @@
+/* Rec.css */
+
+.rec-container {
+    padding: 20px;
+    text-align: center;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+  }
+  
+  .rec-container h1 {
+    margin-bottom: 30px;
+    font-size: 2em;
+    font-family: "Pixelify Sans";
+    color: #333;
+  }
+  
+  .cards-row {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    padding-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  
+  .card-item {
+    background-color: #f7f2f2; /* Light pinkish background */
+    border-radius: 15px; /* Rounded corners */
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 250px; /* Adjusted width for better alignment */
+    flex: 0 0 auto; /* Prevent shrinking, allow scrolling */
+    text-align: left;
+    transition: transform 0.2s;
+    position: relative;
+    font-family: "VT323";
+
+
+  }
+  
+  .card-item:hover {
+    transform: translateY(-5px);
+  }
+  
+  .card-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .card-name {
+    font-size: 1.2em;
+    margin: 10px 0 5px 0;
+    color: #222;
+    font-weight: bold;
+  }
+  
+  .card-price {
+    font-size: 1.3em;
+    color: #000; /* Darker text for price */
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  .card-set {
+    font-size: 0.9em;
+    color: #555;
+  }
+  
+  .card-item .badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #000;
+    color: #fff;
+    padding: 5px 8px;
+    border-radius: 50%;
+    font-size: 0.8em;
+    font-weight: bold;
+  }
+  
+  .card-item .bookmark {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.2em;
+    color: #aaa; /* Grey color for the bookmark */
+  }
+  
+  .card-item .bookmark:hover {
+    color: #000; /* Darken on hover */
+  }
+  
+  .card-item .quick-buy {
+    display: inline-block;
+    background-color: #00c853; /* Green background */
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.9em;
+    margin-top: 5px;
+  }
+  

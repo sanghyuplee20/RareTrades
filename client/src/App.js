@@ -4,6 +4,7 @@ import Rec from './pages/Rec';
 import Search from './pages/Search';
 import Ranking from './pages/Ranking';
 import About from './pages/About';
+import Footer from './Footer';
 
 function App() {
   let Component;
@@ -27,6 +28,7 @@ function App() {
       <div className="content">
         {Component}
       </div>
+      <Footer />
     </div>
   );
 }
