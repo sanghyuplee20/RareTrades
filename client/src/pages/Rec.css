@@ -1,29 +1,59 @@
-/* Rec.css */
+/* Reset the margins and padding for body and html to ensure full-width */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
 
+/* Container for the entire recommendation page */
 .rec-container {
-    padding: 20px;
     text-align: center;
     background-color: #f5f5f5;
     min-height: 100vh;
-  }
-  
-  .rec-container h1 {
+    width: 100%;
+    padding: 0; /* Remove padding to eliminate any white space */
+}
+
+/* Banner container */
+.banner-container {
+    width: 100%;
+    margin: 0; /* Remove margin to eliminate any white space */
+}
+
+/* Banner image */
+.banner-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* The container for the rest of the content */
+.rec-content {
+    padding: 20px;
+    text-align: center;
+    background-color: white;
+}
+
+/* Styling for the title */
+.rec-container h1 {
     margin-bottom: 30px;
     font-size: 2em;
     font-family: "Pixelify Sans";
     color: #333;
-  }
-  
-  .cards-row {
+}
+
+/* Cards row container */
+.cards-row {
     display: flex;
     overflow-x: auto;
     gap: 20px;
     padding-bottom: 20px;
     padding-left: 10px;
     padding-right: 10px;
-  }
-  
-  .card-item {
+}
+
+/* Individual card item */
+.card-item {
     background-color: #f7f2f2; /* Light pinkish background */
     border-radius: 15px; /* Rounded corners */
     padding: 15px;
@@ -34,41 +64,43 @@
     transition: transform 0.2s;
     position: relative;
     font-family: "VT323";
+}
 
-
-  }
-  
-  .card-item:hover {
+.card-item:hover {
     transform: translateY(-5px);
-  }
-  
-  .card-image {
+}
+
+.card-image {
     width: 100%;
     height: auto;
     border-radius: 10px;
     margin-bottom: 10px;
-  }
-  
-  .card-name {
+}
+
+/* Name of the card */
+.card-name {
     font-size: 1.2em;
     margin: 10px 0 5px 0;
     color: #222;
     font-weight: bold;
-  }
-  
-  .card-price {
+}
+
+/* Price of the card */
+.card-price {
     font-size: 1.3em;
     color: #000; /* Darker text for price */
     font-weight: bold;
     margin-top: 10px;
-  }
-  
-  .card-set {
+}
+
+/* Set name */
+.card-set {
     font-size: 0.9em;
     color: #555;
-  }
-  
-  .card-item .badge {
+}
+
+/* Badge styling */
+.card-item .badge {
     position: absolute;
     top: 10px;
     left: 10px;
@@ -78,21 +110,23 @@
     border-radius: 50%;
     font-size: 0.8em;
     font-weight: bold;
-  }
-  
-  .card-item .bookmark {
+}
+
+/* Bookmark icon styling */
+.card-item .bookmark {
     position: absolute;
     top: 10px;
     right: 10px;
     font-size: 1.2em;
     color: #aaa; /* Grey color for the bookmark */
-  }
-  
-  .card-item .bookmark:hover {
+}
+
+.card-item .bookmark:hover {
     color: #000; /* Darken on hover */
-  }
-  
-  .card-item .quick-buy {
+}
+
+/* Quick buy button styling */
+.card-item .quick-buy {
     display: inline-block;
     background-color: #00c853; /* Green background */
     color: #fff;
@@ -100,5 +134,4 @@
     border-radius: 12px;
     font-size: 0.9em;
     margin-top: 5px;
-  }
-  
+}

@@ -17,47 +17,19 @@ function Rec() {
             'X-Api-Key': process.env.REACT_APP_POKEMON_API_KEY,
           },
           params: {
-            pageSize: 250, // Fetch a large number to ensure we have enough data
+            pageSize: 250, // Fetch a large number of cards to ensure we get the latest ones
           },
         });
 
-        const allCards = response.data.data;
-
-        // Filter cards that have price information
-        const cardsWithPrices = allCards.filter(
-          (card) => card.tcgplayer && card.tcgplayer.prices && (
-            card.tcgplayer.prices.holofoil?.high ||
-            card.tcgplayer.prices.normal?.high ||
-            card.tcgplayer.prices.reverseHolofoil?.high ||
-            card.tcgplayer.prices.firstEditionHolofoil?.high
-          )
+        // Sort the cards by release date in descending order
+        const sortedByReleaseDate = response.data.data.sort(
+          (a, b) => new Date(b.set.releaseDate) - new Date(a.set.releaseDate)
         );
 
-        // Map cards to include the highest available price
-        const cardsWithHighestPrice = cardsWithPrices.map((card) => {
-          const prices = card.tcgplayer.prices;
-          const highPrices = [
-            prices.holofoil?.high || 0,
-            prices.normal?.high || 0,
-            prices.reverseHolofoil?.high || 0,
-            prices.firstEditionHolofoil?.high || 0,
-          ];
-          const highestPrice = Math.max(...highPrices);
-          return { ...card, highestPrice };
-        });
+        // Take the most recent 10 cards
+        const recentCards = sortedByReleaseDate.slice(0, 10);
 
-        // Sort cards by highestPrice descending
-        const sortedCards = cardsWithHighestPrice.sort(
-          (a, b) => b.highestPrice - a.highestPrice
-        );
-
-        // Shuffle the sorted cards to introduce randomness
-        const shuffledCards = sortedCards.sort(() => 0.5 - Math.random());
-
-        // Take a random set of 10 cards from the shuffled array
-        const top10Cards = shuffledCards.slice(0, 10);
-
-        setCards(top10Cards);
+        setCards(recentCards);
         setLoading(false);
       } catch (err) {
         console.error('Error fetching data:', err);
@@ -87,22 +59,26 @@ function Rec() {
 
   return (
     <div className="rec-container">
-      <h1>Random Pokémon Card Recommendations</h1>
+      <div className="banner-container">
+        <img src={require('../ui/rec1.png')} alt="Banner" className="banner-image" />
+      </div>
+      <h1>Recently Released Pokémon Cards</h1>
       <div className="cards-row">
-        {cards.map((card) => (
+        {cards.map((card, index) => (
           <div key={card.id} className="card-item">
+            <span className="badge">{index + 1}</span>
             <img
               src={card.images.large || card.images.small}
               alt={card.name}
               className="card-image"
             />
             <h2 className="card-name">{card.name}</h2>
-            <p className="card-price">
-              Price: ${card.highestPrice.toFixed(2)}
-            </p>
             <p className="card-set">
               Set: {card.set.name} ({card.set.series})
             </p>
+            <p className="card-release">Release Date: {new Date(card.set.releaseDate).toLocaleDateString()}</p>
+            <span className="quick-buy">Quick Buy</span>
+            <span className="bookmark">🔖</span>
           </div>
         ))}
       </div>
