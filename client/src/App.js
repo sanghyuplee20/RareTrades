@@ -5,6 +5,7 @@ import Search from './pages/Search';
 import Ranking from './pages/Ranking';
 import About from './pages/About';
 import Footer from './Footer';
+import Login from './pages/Login';
 
 function App() {
   let Component;
@@ -17,6 +18,9 @@ function App() {
       break;
     case "/about":
       Component = <About />;
+      break;
+    case "/login":
+      Component = <Login />;
       break;
     default:
       Component = <Rec />;

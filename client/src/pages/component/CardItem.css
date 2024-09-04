@@ -1,0 +1,42 @@
+/* CardItem.css */
+
+/* Individual card item */
+.card-item {
+    background-color: #f7f2f2; /* Light pinkish background */
+    border-radius: 15px; /* Rounded corners */
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 250px; /* Adjusted width for better alignment */
+    flex: 0 0 auto; /* Prevent shrinking, allow scrolling */
+    text-align: left;
+    transition: transform 0.2s;
+    position: relative;
+    font-family: "VT323";
+}
+
+.card-item:hover {
+    transform: translateY(-5px);
+}
+
+.card-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+/* Name of the card */
+.card-name {
+    font-size: 1.2em;
+    margin: 10px 0 5px 0;
+    color: #222;
+    font-weight: bold;
+}
+
+/* Price of the card */
+.card-price {
+    font-size: 1.3em;
+    color: #000; /* Darker text for price */
+    font-weight: bold;
+    margin-top: 10px;
+}

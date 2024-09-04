@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './Rec.css'; // Ensure you have styles for horizontal scrolling
+import './Rec.css';
+import CardItem from './component/CardItem'; // Import the CardItem component
 
 function Rec() {
     const [pokemonCards, setPokemonCards] = useState([]);
     const [yugiohCards, setYugiohCards] = useState([]);
-    const [currentBanner, setCurrentBanner] = useState(0); // State to manage the current banner image
+    const [currentBanner, setCurrentBanner] = useState(0);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const banners = [require('../ui/rec1.png'), require('../ui/rec2.png')]; // Array of banner images
+    const banners = [require('../ui/rec1.png'), require('../ui/rec2.png')];
 
     useEffect(() => {
         const fetchPokemonCards = async () => {
@@ -24,7 +25,6 @@ function Rec() {
                     },
                 });
 
-                // Sort the cards by the most expensive price in descending order
                 const sortedByPrice = response.data.data.sort((a, b) => {
                     const priceA = a.tcgplayer?.prices?.normal?.high || 0;
                     const priceB = b.tcgplayer?.prices?.normal?.high || 0;
@@ -44,7 +44,6 @@ function Rec() {
                 const yugiohApiUrl = 'https://db.ygoprodeck.com/api/v7/cardinfo.php';
                 const response = await axios.get(yugiohApiUrl);
 
-                // Sort the cards by the most expensive price in descending order
                 const sortedByPrice = response.data.data.sort((a, b) => {
                     const priceA = parseFloat(a.card_prices?.[0]?.tcgplayer_price || 0);
                     const priceB = parseFloat(b.card_prices?.[0]?.tcgplayer_price || 0);
@@ -105,9 +104,7 @@ function Rec() {
                             key={index}
                             className={`dot ${index === currentBanner ? 'active' : ''}`}
                             onClick={() => setCurrentBanner(index)}
-                        >
-                            {/* Empty content since we're styling the dots */}
-                        </button>
+                        ></button>
                     ))}
                 </div>
             </div>
@@ -115,15 +112,12 @@ function Rec() {
                 <h1>Top 10 Most Expensive Yu-Gi-Oh! Cards</h1>
                 <div className="cards-row">
                     {yugiohCards.map((card, index) => (
-                        <div key={card.id} className="card-item">
-                            <img
-                                src={card.card_images[0].image_url_small}
-                                alt={card.name}
-                                className="card-image"
-                            />
-                            <h2 className="card-name">{card.name}</h2>
-                            <p className="card-price">Price: ${parseFloat(card.card_prices?.[0]?.tcgplayer_price || 0).toFixed(2)}</p>
-                        </div>
+                        <CardItem
+                            key={card.id}
+                            imageUrl={card.card_images[0].image_url_small}
+                            name={card.name}
+                            price={parseFloat(card.card_prices?.[0]?.tcgplayer_price || 0).toFixed(2)}
+                        />
                     ))}
                 </div>
             </div>
@@ -131,15 +125,12 @@ function Rec() {
                 <h1>Top 10 Most Expensive Pokémon Cards</h1>
                 <div className="cards-row">
                     {pokemonCards.map((card, index) => (
-                        <div key={card.id} className="card-item">
-                            <img
-                                src={card.images.small}
-                                alt={card.name}
-                                className="card-image"
-                            />
-                            <h2 className="card-name">{card.name}</h2>
-                            <p className="card-price">Price: ${card.tcgplayer?.prices?.normal?.high?.toFixed(2) || 'N/A'}</p>
-                        </div>
+                        <CardItem
+                            key={card.id}
+                            imageUrl={card.images.small}
+                            name={card.name}
+                            price={card.tcgplayer?.prices?.normal?.high?.toFixed(2) || 'N/A'}
+                        />
                     ))}
                 </div>
             </div>

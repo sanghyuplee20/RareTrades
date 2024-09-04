@@ -1,0 +1,144 @@
+/* Full-screen container */
+.loginform {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+    font-family: "Pixelify Sans", sans-serif; /* Retro font for logo */
+}
+
+/* Styling for the form */
+form {
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    border-color: black;
+    border-style: solid;
+    width: 350px;
+    text-align: center;
+}
+
+/* Input fields with a minimalist style, resembling the screenshot */
+.login--input-box {
+    width: 100%;
+    margin: 15px 0;
+    position: relative;
+}
+
+.login--input-box input {
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid #b0b0b0;
+    padding: 10px 5px;
+    background-color: transparent; /* Transparent background */
+    font-size: 1rem;
+    color: #b0b0b0;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.login--input-box input::placeholder {
+    color: #b0b0b0;
+    font-size: 1rem; /* Simple placeholder text */
+}
+
+.login--input-box input:focus {
+    border-bottom-color: black; /* Highlight the bottom border when focused */
+}
+
+.login--input-box input:focus::placeholder {
+    color: transparent; /* Hide placeholder on focus for a cleaner look */
+}
+
+
+/* Retro-style button */
+button[type="submit"] {
+    background-color: #787878;
+    border: none;
+    padding: 15px 30px;
+    color: #fffbff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+button[type="submit"]:hover {
+    background-color: black;
+    transform: scale(1.05);
+}
+
+/* Remember me and forgot password section */
+.login--remember-forgot {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Styling for 'Forgot password?' link */
+.login--remember-forgot a {
+    position: relative;
+    text-decoration: none;
+    color: black;
+    font-size: 1rem;
+    transition: color 0.25s ease-out;
+}
+
+/* Underline effect on hover for 'Forgot password?' */
+.login--remember-forgot a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: black;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.25s ease-out;
+}
+
+/* Hover state to show underline */
+.login--remember-forgot a:hover::after {
+    transform: scaleX(1);
+}
+
+.login--remember-forgot a:hover {
+    color: black; /* Keeps the text color black when hovered */
+}
+
+/* Register link without underline */
+.login--register a {
+    position: relative;
+    text-decoration: none;
+    color: black;
+    font-size: 1rem;
+    transition: color 0.25s ease-out;
+}
+
+/* Underline effect on hover */
+.login--register a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: black;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.25s ease-out;
+}
+
+/* Hover state to show underline */
+.login--register a:hover::after {
+    transform: scaleX(1);
+}
+
+.login--register a:hover {
+    color: black; /* Optional: Keeps the text color black when hovered */
+}
