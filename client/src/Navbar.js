@@ -1,7 +1,7 @@
 export default function Navbar() {
     return (
         <nav>
-            <a href="recommendation" class="logo-link">
+            <a href="recommendation" className="logo-link">
                 <h1 className="logo">RareTrades</h1>
             </a>
             <ul className="nav-links">

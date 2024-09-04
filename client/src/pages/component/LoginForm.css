@@ -33,7 +33,7 @@ form {
     padding: 10px 5px;
     background-color: transparent; /* Transparent background */
     font-size: 1rem;
-    color: #b0b0b0;
+    color: black;
     outline: none;
     transition: border-color 0.3s ease;
 }
