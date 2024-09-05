@@ -8,7 +8,7 @@ const pool = new Pool(
     }
 )
 
-pool.query("CREATE DATABASE RareTrades;").then((response) => {
+pool.query("CREATE DATABASE raretrades;").then((response) => {
     console.log("Database created")
     console.log(response)
 }).catch((err) => {

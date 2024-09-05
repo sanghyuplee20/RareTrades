@@ -1,14 +1,14 @@
 // seed.js
 const { Pool } = require("pg");
 const bcrypt = require("bcrypt");
+require("dotenv").config(); 
 
-// Configure PostgreSQL connection
 const pool = new Pool({
-    user: "postgres",
-    password: "290709Sw",
-    host: "localhost",
-    database: "raretrades", 
-    port: 5432
+    user: process.env.PGUSER,
+    password: process.env.PGPASSWORD,
+    host: process.env.PGHOST,
+    database: process.env.PGDATABASE,
+    port: process.env.PGPORT
 });
 
 const addUserWithHashedPassword = async () => {

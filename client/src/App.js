@@ -6,34 +6,27 @@ import Ranking from './pages/Ranking';
 import About from './pages/About';
 import Footer from './Footer';
 import Login from './pages/Login';
+import SignUp from './pages/component/SignUp'; // Make sure to import SignUp
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
-  let Component;
-  switch (window.location.pathname) {
-    case "/search":
-      Component = <Search />;
-      break;
-    case "/ranking":
-      Component = <Ranking />;
-      break;
-    case "/about":
-      Component = <About />;
-      break;
-    case "/login":
-      Component = <Login />;
-      break;
-    default:
-      Component = <Rec />;
-  }
-
   return (
-    <div className="App">
-      <Navbar />
-      <div className="content">
-        {Component}
+    <Router>
+      <div className="App">
+        <Navbar />
+        <div className="content">
+          <Routes>
+            <Route path="/search" element={<Search />} />
+            <Route path="/ranking" element={<Ranking />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/join" element={<SignUp />} />
+            <Route path="/recommendation" element={<Rec />} /> {/* Default route */}
+          </Routes>
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </Router>
   );
 }
 

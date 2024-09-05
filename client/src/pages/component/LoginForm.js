@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./LoginForm.css";
+import { Link } from "react-router-dom";
+
 
 function LoginForm() {
     // State for form inputs
@@ -9,7 +11,7 @@ function LoginForm() {
     // Handle form submission
     const handleSubmit = async (event) => {
         event.preventDefault(); // Prevent default form submission behavior
-    
+
         try {
             const response = await fetch("http://localhost:4000/api/login", {
                 method: "POST",
@@ -18,9 +20,9 @@ function LoginForm() {
                 },
                 body: JSON.stringify({ username, password }),
             });
-    
+
             const result = await response.json();
-    
+
             if (response.ok) {
                 // Successful login
                 console.log(result.message); // e.g., "Login successful"
@@ -33,13 +35,13 @@ function LoginForm() {
             console.error("Error during login:", error.message || error);
         }
     };
-    
+
 
     return (
         <div className="loginform">
             <form onSubmit={handleSubmit}>
                 <h1 className="logo">RareTrades</h1>
-                
+
                 <div className="login--input-box">
                     <input
                         type="text"
@@ -49,7 +51,7 @@ function LoginForm() {
                         required
                     />
                 </div>
-                
+
                 <div className="login--input-box">
                     <input
                         type="password"
@@ -71,8 +73,9 @@ function LoginForm() {
 
                 <div className="login--register">
                     <p>
-                        Don't have an account? <a href="#">Register</a>
+                        Don't have an account? <Link to="/join">Register</Link>
                     </p>
+
                 </div>
             </form>
         </div>
