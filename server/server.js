@@ -62,4 +62,44 @@ app.post("/api/login", async (req, res) => {
     }
 });
 
+app.post("/api/signup", async (req, res) => {
+    const { username, password, first_name, last_name, email } = req.body;
+
+    // Check if all required fields are present
+    if (!username || !password || !first_name || !last_name || !email) {
+        return res.status(400).json({ message: "All fields are required" });
+    }
+
+    try {
+        // Generate salt and hash the password
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        // Insert the new user into the database
+        const result = await pool.query(
+            "INSERT INTO users (username, password, first_name, last_name, email) VALUES ($1, $2, $3, $4, $5) RETURNING id",
+            [username, hashedPassword, first_name, last_name, email]
+        );
+
+        // Return success response with the new user's id
+        return res.status(201).json({
+            message: "User registered successfully",
+            userId: result.rows[0].id
+        });
+
+    } catch (error) {
+        console.error("Error during signup query:", error);
+
+        // If the username or email is already taken, handle the error
+        if (error.code === '23505') {
+            return res.status(409).json({ message: "Username or email already exists" });
+        }
+
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+
+
+
 app.listen(4000, () => console.log("Server running on http://localhost:4000"));

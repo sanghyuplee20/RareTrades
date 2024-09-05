@@ -12,7 +12,7 @@ const pool = new Pool({
 });
 
 const addUserWithHashedPassword = async () => {
-    const password = 'validpassword'; // The password to hash
+    const password = 'adminpassword'; // The password to hash
     const saltRounds = 10;
 
     bcrypt.hash(password, saltRounds, async (err, hash) => {
@@ -24,8 +24,8 @@ const addUserWithHashedPassword = async () => {
         // Insert the user with the hashed password into the database
         try {
             const result = await pool.query(
-                "INSERT INTO users (username, password) VALUES ($1, $2)",
-                ['validuser', hash]
+                "INSERT INTO users (username, password, first_name, last_name, email) VALUES ($1, $2, $3, $4, $5)",
+                ['admin', hash, 'Sanghyup', 'Lee', 'slee548@jh.edu']
             );
             console.log('User added successfully');
         } catch (error) {

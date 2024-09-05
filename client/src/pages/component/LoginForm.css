@@ -51,6 +51,10 @@ form {
     color: transparent; /* Hide placeholder on focus for a cleaner look */
 }
 
+/* Make the underline black when the input has valid input */
+.login--input-box input:valid {
+    border-bottom-color: black; /* Change to black when there's valid input */
+}
 
 /* Retro-style button */
 button[type="submit"] {
