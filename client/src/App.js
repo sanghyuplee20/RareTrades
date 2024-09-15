@@ -5,29 +5,48 @@ import Search from './pages/Search';
 import Ranking from './pages/Ranking';
 import About from './pages/About';
 import Footer from './Footer';
-import Login from './pages/Login';
-import SignUp from './pages/component/SignUp'; // Make sure to import SignUp
+import LoginForm from './pages/component/LoginForm';
+import SignUp from './pages/component/SignUp';
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import { AuthProvider } from './pages/AuthContext'; // Corrected import path
+import PrivateRoute from './pages/component/PrivateRoute';
 
 function App() {
   return (
-    <Router>
-      <div className="App">
-        <Navbar />
-        <div className="content">
-          <Routes>
-            <Route path="/search" element={<Search />} />
-            <Route path="/ranking" element={<Ranking />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/join" element={<SignUp />} />
-            <Route path="/recommendation" element={<Rec />} />
-            <Route path="/" element={<Navigate to="/recommendation" />} /> {/* Redirect root to /recommendation */}
-          </Routes>
+    <AuthProvider>
+      <Router>
+        <div className="App">
+          <Navbar />
+          <div className="content">
+            <Routes>
+              {/* "Recommendations" is accessible to all users */}
+              <Route path="/recommendation" element={<Rec />} />
+
+              {/* Protected Routes */}
+              <Route path="/search" element={
+                <PrivateRoute>
+                  <Search />
+                </PrivateRoute>
+              } />
+              <Route path="/ranking" element={
+                <PrivateRoute>
+                  <Ranking />
+                </PrivateRoute>
+              } />
+
+              {/* Public Routes */}
+              <Route path="/about" element={<About />} />
+              <Route path="/login" element={<LoginForm />} />
+              <Route path="/join" element={<SignUp />} />
+
+              {/* Redirect root to /recommendation */}
+              <Route path="/" element={<Navigate to="/recommendation" />} />
+            </Routes>
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
-    </Router>
+      </Router>
+    </AuthProvider>
   );
 }
 
