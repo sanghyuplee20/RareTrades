@@ -59,15 +59,9 @@ nav .logo {
 
 .nav-links a:hover::after {
     transform: scaleX(1);
-    transform-origin: center;
 }
 
 .nav-links a:visited,
-.logo-link:visited {
-    color: black;
-    text-decoration: none;
-}
-
 .logo-link:visited {
     color: black;
     text-decoration: none;
@@ -93,6 +87,11 @@ nav .logo {
     content: '▼';
     font-size: 12px;
     margin-left: 5px;
+    transition: transform 0.3s ease;
+}
+
+.username-dropdown.open .username::after {
+    transform: rotate(90deg); /* Arrow moves to the side when clicked */
 }
 
 .username-dropdown .dropdown-menu {
@@ -101,41 +100,58 @@ nav .logo {
     right: 0;
     background-color: white;
     min-width: 150px;
-    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    border: 1px solid black;
     z-index: 1;
     margin: 0;
-    padding: 0;
+    padding: 10px;
     list-style: none;
 }
 
 .username-dropdown .dropdown-menu li {
     padding: 10px 16px;
+    text-align: left;
+}
+
+/* Add margin between buttons except for the last one */
+.username-dropdown .dropdown-menu li:not(:last-child) {
+    margin-bottom: 10px; /* Adjust the value as needed */
 }
 
 .username-dropdown .dropdown-menu li a,
 .username-dropdown .dropdown-menu li button {
+    position: relative;
     color: black;
     text-decoration: none;
-    display: block;
-    width: 100%;
+    display: inline-block;
     background: none;
     border: none;
     padding: 0;
     font: inherit;
-    text-align: left;
+    cursor: pointer;
+}
+
+.username-dropdown .dropdown-menu li a::after,
+.username-dropdown .dropdown-menu li button::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: black;
+    transform-origin: center;
+    transition: transform 0.25s ease-out;
+}
+
+.username-dropdown .dropdown-menu li a:hover::after,
+.username-dropdown .dropdown-menu li button:hover::after {
+    transform: scaleX(1);
 }
 
 .username-dropdown .dropdown-menu li a:hover,
 .username-dropdown .dropdown-menu li button:hover {
-    background-color: #f1f1f1;
-}
-
-.username-dropdown .dropdown-menu li button {
-    cursor: pointer;
-    background: none;
-    border: none;
-    width: 100%;
-    text-align: left;
+    background-color: transparent; /* Ensure background doesn't change */
 }
 
 .logout-button {
@@ -149,5 +165,5 @@ nav .logo {
 }
 
 .logout-button:hover {
-    text-decoration: underline;
+    text-decoration: none; /* Remove stale underline */
 }

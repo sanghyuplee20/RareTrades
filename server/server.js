@@ -4,11 +4,11 @@ const express = require("express");
 const cors = require("cors");
 const { Pool } = require("pg");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken"); // Import jsonwebtoken
+const axios = require('axios');
+const jwt = require("jsonwebtoken");
 require("dotenv").config(); // Load environment variables from .env file
 
 const app = express();
-
 app.use(express.json());
 
 app.use(
@@ -26,10 +26,13 @@ const pool = new Pool({
   port: process.env.PGPORT,
 });
 
+// In-memory cache variables
+let pokemonCache = null;
+let yugiohCache = null;
+
 // Middleware to authenticate token
 function authenticateToken(req, res, next) {
   const authHeader = req.headers["authorization"];
-
   // The token is expected to be in the format 'Bearer TOKEN'
   const token = authHeader && authHeader.split(" ")[1];
 
@@ -52,6 +55,66 @@ function authenticateToken(req, res, next) {
   });
 }
 
+// Fetch Pokémon cards
+app.get('/api/pokemon-cards', async (req, res) => {
+  try {
+    if (pokemonCache) {
+      return res.json(pokemonCache);
+    }
+
+    const apiUrl = 'https://api.pokemontcg.io/v2/cards';
+    const response = await axios.get(apiUrl, {
+      headers: {
+        'X-Api-Key': process.env.POKEMON_API_KEY,
+      },
+      params: {
+        pageSize: 250,
+      },
+    });
+
+    const sortedByPrice = response.data.data.sort((a, b) => {
+      const priceA = a.tcgplayer?.prices?.normal?.high || 0;
+      const priceB = b.tcgplayer?.prices?.normal?.high || 0;
+      return priceB - priceA;
+    });
+
+    const top10PokemonCards = sortedByPrice.slice(0, 10);
+    pokemonCache = top10PokemonCards; // Cache the data
+
+    res.json(top10PokemonCards);
+  } catch (error) {
+    console.error('Error fetching Pokémon cards:', error);
+    res.status(500).json({ message: 'Failed to fetch Pokémon cards' });
+  }
+});
+
+// Fetch Yu-Gi-Oh! cards
+app.get('/api/yugioh-cards', async (req, res) => {
+  try {
+    if (yugiohCache) {
+      return res.json(yugiohCache);
+    }
+
+    const yugiohApiUrl = 'https://db.ygoprodeck.com/api/v7/cardinfo.php';
+    const response = await axios.get(yugiohApiUrl);
+
+    const sortedByPrice = response.data.data.sort((a, b) => {
+      const priceA = parseFloat(a.card_prices?.[0]?.tcgplayer_price || 0);
+      const priceB = parseFloat(b.card_prices?.[0]?.tcgplayer_price || 0);
+      return priceB - priceA;
+    });
+
+    const top10YugiohCards = sortedByPrice.slice(0, 10);
+    yugiohCache = top10YugiohCards; // Cache the data
+
+    res.json(top10YugiohCards);
+  } catch (error) {
+    console.error('Error fetching Yu-Gi-Oh! cards:', error);
+    res.status(500).json({ message: 'Failed to fetch Yu-Gi-Oh! cards' });
+  }
+});
+
+// User Login
 app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
 
@@ -116,6 +179,7 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
+// User Signup
 app.post("/api/signup", async (req, res) => {
   const { username, password, first_name, last_name, email } = req.body;
 

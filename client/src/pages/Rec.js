@@ -12,61 +12,36 @@ function Rec() {
 
     const banners = [require('../ui/rec1.png'), require('../ui/rec2.png')];
 
+
     useEffect(() => {
         const fetchPokemonCards = async () => {
-            try {
-                const apiUrl = 'https://api.pokemontcg.io/v2/cards';
-                const response = await axios.get(apiUrl, {
-                    headers: {
-                        'X-Api-Key': process.env.REACT_APP_POKEMON_API_KEY,
-                    },
-                    params: {
-                        pageSize: 250,
-                    },
-                });
-
-                const sortedByPrice = response.data.data.sort((a, b) => {
-                    const priceA = a.tcgplayer?.prices?.normal?.high || 0;
-                    const priceB = b.tcgplayer?.prices?.normal?.high || 0;
-                    return priceB - priceA;
-                });
-
-                const top10PokemonCards = sortedByPrice.slice(0, 10);
-                setPokemonCards(top10PokemonCards);
-            } catch (err) {
-                console.error('Error fetching Pokémon cards:', err);
-                setError('Failed to fetch Pokémon cards. Please try again later.');
-            }
+          try {
+            const response = await axios.get('http://localhost:4000/api/pokemon-cards');
+            setPokemonCards(response.data);
+          } catch (err) {
+            console.error('Error fetching Pokémon cards:', err);
+            setError('Failed to fetch Pokémon cards. Please try again later.');
+          }
         };
-
+    
         const fetchYugiohCards = async () => {
-            try {
-                const yugiohApiUrl = 'https://db.ygoprodeck.com/api/v7/cardinfo.php';
-                const response = await axios.get(yugiohApiUrl);
-
-                const sortedByPrice = response.data.data.sort((a, b) => {
-                    const priceA = parseFloat(a.card_prices?.[0]?.tcgplayer_price || 0);
-                    const priceB = parseFloat(b.card_prices?.[0]?.tcgplayer_price || 0);
-                    return priceB - priceA;
-                });
-
-                const top10YugiohCards = sortedByPrice.slice(0, 10);
-                setYugiohCards(top10YugiohCards);
-            } catch (err) {
-                console.error('Error fetching Yu-Gi-Oh! cards:', err);
-                setError('Failed to fetch Yu-Gi-Oh! cards. Please try again later.');
-            }
+          try {
+            const response = await axios.get('http://localhost:4000/api/yugioh-cards');
+            setYugiohCards(response.data);
+          } catch (err) {
+            console.error('Error fetching Yu-Gi-Oh! cards:', err);
+            setError('Failed to fetch Yu-Gi-Oh! cards. Please try again later.');
+          }
         };
-
+    
         const fetchData = async () => {
-            setLoading(true);
-            await fetchPokemonCards();
-            await fetchYugiohCards();
-            setLoading(false);
+          setLoading(true);
+          await Promise.all([fetchPokemonCards(), fetchYugiohCards()]);
+          setLoading(false);
         };
-
+    
         fetchData();
-    }, []);
+      }, []);
 
     const handleNextBanner = () => {
         setCurrentBanner((prevBanner) => (prevBanner + 1) % banners.length);

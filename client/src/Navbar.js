@@ -1,5 +1,3 @@
-// Navbar.js
-
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from './pages/AuthContext'; // Adjust the path based on your directory structure
@@ -72,14 +70,18 @@ export default function Navbar() {
               {dropdownOpen && (
                 <ul className="dropdown-menu">
                   <li>
-                    <Link to="/dashboard">Dashboard</Link>
+                    <Link to="/dashboard">
+                      <span>Dashboard</span>
+                    </Link>
                   </li>
                   <li>
-                    <Link to="/settings">Settings</Link>
+                    <Link to="/settings">
+                      <span>Settings</span>
+                    </Link>
                   </li>
                   <li>
                     <button onClick={handleLogout} className="logout-button">
-                      Logout
+                      <span>Logout</span>
                     </button>
                   </li>
                 </ul>
