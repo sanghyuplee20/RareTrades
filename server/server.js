@@ -6,7 +6,9 @@ const { Pool } = require("pg");
 const bcrypt = require("bcrypt");
 const axios = require('axios');
 const jwt = require("jsonwebtoken");
-require("dotenv").config(); // Load environment variables from .env file
+const NodeCache = require('node-cache');
+const rateLimit = require('express-rate-limit');
+require("dotenv").config();
 
 const app = express();
 app.use(express.json());
@@ -17,6 +19,14 @@ app.use(
   })
 );
 
+// Apply rate limiting to all requests
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again later.',
+});
+app.use(limiter);
+
 // Configure PostgreSQL connection using environment variables
 const pool = new Pool({
   user: process.env.PGUSER,
@@ -26,9 +36,8 @@ const pool = new Pool({
   port: process.env.PGPORT,
 });
 
-// In-memory cache variables
-let pokemonCache = null;
-let yugiohCache = null;
+// Initialize cache
+const cache = new NodeCache({ stdTTL: 3600 }); // Cache TTL of 1 hour
 
 // Middleware to authenticate token
 function authenticateToken(req, res, next) {
@@ -55,62 +64,87 @@ function authenticateToken(req, res, next) {
   });
 }
 
-// Fetch Pokémon cards
-app.get('/api/pokemon-cards', async (req, res) => {
+// Fetch combined cards sorted by last_updated (most recent)
+app.get('/api/cards', async (req, res) => {
   try {
-    if (pokemonCache) {
-      return res.json(pokemonCache);
+    const cachedCards = cache.get('recentCards');
+    if (cachedCards) {
+      return res.json(cachedCards);
     }
 
-    const apiUrl = 'https://api.pokemontcg.io/v2/cards';
-    const response = await axios.get(apiUrl, {
-      headers: {
-        'X-Api-Key': process.env.POKEMON_API_KEY,
-      },
-      params: {
-        pageSize: 250,
-      },
-    });
+    const result = await pool.query(`
+      SELECT id, name, image_url, price, views, brand
+      FROM cards
+      ORDER BY last_updated DESC
+      LIMIT 20
+    `);
 
-    const sortedByPrice = response.data.data.sort((a, b) => {
-      const priceA = a.tcgplayer?.prices?.normal?.high || 0;
-      const priceB = b.tcgplayer?.prices?.normal?.high || 0;
-      return priceB - priceA;
-    });
-
-    const top10PokemonCards = sortedByPrice.slice(0, 10);
-    pokemonCache = top10PokemonCards; // Cache the data
-
-    res.json(top10PokemonCards);
+    cache.set('recentCards', result.rows); // Cache the data
+    res.json(result.rows);
   } catch (error) {
-    console.error('Error fetching Pokémon cards:', error);
-    res.status(500).json({ message: 'Failed to fetch Pokémon cards' });
+    console.error('Error fetching recent cards:', error);
+    res.status(500).json({ message: 'Failed to fetch recent cards' });
   }
 });
 
-// Fetch Yu-Gi-Oh! cards
-app.get('/api/yugioh-cards', async (req, res) => {
+// Fetch individual card by ID and brand
+app.get('/api/cards/:brand/:id', async (req, res) => {
+  const { brand, id } = req.params;
   try {
-    if (yugiohCache) {
-      return res.json(yugiohCache);
+    // Increment views
+    await pool.query('UPDATE cards SET views = views + 1 WHERE id = $1 AND brand = $2', [id, brand]);
+
+    const result = await pool.query('SELECT * FROM cards WHERE id = $1 AND brand = $2', [id, brand]);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Card not found' });
     }
 
-    const yugiohApiUrl = 'https://db.ygoprodeck.com/api/v7/cardinfo.php';
-    const response = await axios.get(yugiohApiUrl);
-
-    const sortedByPrice = response.data.data.sort((a, b) => {
-      const priceA = parseFloat(a.card_prices?.[0]?.tcgplayer_price || 0);
-      const priceB = parseFloat(b.card_prices?.[0]?.tcgplayer_price || 0);
-      return priceB - priceA;
-    });
-
-    const top10YugiohCards = sortedByPrice.slice(0, 10);
-    yugiohCache = top10YugiohCards; // Cache the data
-
-    res.json(top10YugiohCards);
+    res.json(result.rows[0]);
   } catch (error) {
-    console.error('Error fetching Yu-Gi-Oh! cards:', error);
-    res.status(500).json({ message: 'Failed to fetch Yu-Gi-Oh! cards' });
+    console.error('Error fetching card:', error);
+    res.status(500).json({ message: 'Failed to fetch card' });
+  }
+});
+
+// Get comments for a card
+app.get('/api/cards/:brand/:id/comments', async (req, res) => {
+  const { brand, id } = req.params;
+  try {
+    const result = await pool.query(
+      `SELECT c.id, c.comment_text, c.created_at, u.username 
+       FROM comments c 
+       JOIN users u ON c.user_id = u.id 
+       WHERE c.card_id = $1 AND c.brand = $2 
+       ORDER BY c.created_at ASC`,
+      [id, brand]
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching comments:', error);
+    res.status(500).json({ message: 'Failed to fetch comments' });
+  }
+});
+
+// Post a comment for a card (authenticated)
+app.post('/api/cards/:brand/:id/comments', authenticateToken, async (req, res) => {
+  const { brand, id } = req.params;
+  const { comment_text } = req.body;
+  const user_id = req.user.userId;
+
+  if (!comment_text) {
+    return res.status(400).json({ message: 'Comment text is required' });
+  }
+
+  try {
+    await pool.query(
+      `INSERT INTO comments (card_id, brand, user_id, comment_text, created_at) 
+       VALUES ($1, $2, $3, $4, NOW())`,
+      [id, brand, user_id, comment_text]
+    );
+    res.status(201).json({ message: 'Comment added successfully' });
+  } catch (error) {
+    console.error('Error adding comment:', error);
+    res.status(500).json({ message: 'Failed to add comment' });
   }
 });
 

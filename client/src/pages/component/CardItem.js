@@ -1,18 +1,17 @@
-import React from 'react';
-import './CardItem.css'; 
+// components/CardItem.js
 
-function CardItem({ imageUrl, name, price }) {
-    return (
-        <div className="card-item">
-            <img
-                src={imageUrl}
-                alt={name}
-                className="card-image"
-            />
-            <h2 className="card-name">{name}</h2>
-            <p className="card-price">Price: ${price}</p>
-        </div>
-    );
+import React from 'react';
+import './CardItem.css';
+
+function CardItem({ card }) {
+  return (
+    <div className="card-item">
+      <img src={card.image_url || '/default-image.png'} alt={card.name} />
+      <h4>{card.name}</h4>
+      <p>Price: ${card.price}</p>
+      <p>Views: {card.views}</p>
+    </div>
+  );
 }
 
 export default CardItem;

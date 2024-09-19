@@ -1,42 +1,34 @@
-/* CardItem.css */
+/* components/CardItem.css */
 
-/* Individual card item */
 .card-item {
-    background-color: #f7f2f2; /* Light pinkish background */
-    border-radius: 15px; /* Rounded corners */
-    padding: 15px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    width: 250px; /* Adjusted width for better alignment */
-    flex: 0 0 auto; /* Prevent shrinking, allow scrolling */
-    text-align: left;
-    transition: transform 0.2s;
-    position: relative;
-    font-family: "VT323";
-}
-
-.card-item:hover {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    transition: box-shadow 0.2s, transform 0.2s;
+    background-color: #f9f9f9;
+    width: 200px; /* Adjust as needed */
+  }
+  
+  .card-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     transform: translateY(-5px);
-}
-
-.card-image {
-    width: 100%;
+  }
+  
+  .card-thumbnail {
+    max-width: 100%;
     height: auto;
-    border-radius: 10px;
-    margin-bottom: 10px;
-}
-
-/* Name of the card */
-.card-name {
-    font-size: 1.2em;
+    border-radius: 4px;
+  }
+  
+  .card-name {
+    font-size: 18px;
     margin: 10px 0 5px 0;
-    color: #222;
-    font-weight: bold;
-}
-
-/* Price of the card */
-.card-price {
-    font-size: 1.3em;
-    color: #000; /* Darker text for price */
-    font-weight: bold;
-    margin-top: 10px;
-}
+    font-family: "Pixelify Sans", sans-serif;
+  }
+  
+  .card-price {
+    font-size: 16px;
+    color: #555;
+  }
+  
