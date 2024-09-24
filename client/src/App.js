@@ -1,4 +1,4 @@
-// App.js
+// src/App.js
 
 import './App.css';
 import Navbar from './Navbar';
@@ -12,6 +12,7 @@ import SignUp from './pages/component/SignUp';
 import Dashboard from './pages/Dashboard'; // Add Dashboard component
 import Settings from './pages/Settings'; // Add Settings component
 import CardDetail from './pages/CardDetail'; // Add CardDetail component
+import ForgotPassword from './pages/ForgotPassword'; // Add ForgotPassword component
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import { AuthProvider } from './pages/AuthContext'; // Ensure correct path
 import PrivateRoute from './pages/component/PrivateRoute';
@@ -29,6 +30,7 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/login" element={<LoginForm />} />
               <Route path="/join" element={<SignUp />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} /> {/* New Route */}
 
               {/* Protected Routes */}
               <Route path="/search" element={

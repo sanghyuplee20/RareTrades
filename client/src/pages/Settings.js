@@ -1,14 +1,18 @@
-// pages/Dashboard.js
 import React, { useContext } from 'react';
-import { AuthContext } from '../pages/AuthContext';
+import { AuthContext } from '../pages/AuthContext'; // Adjust the path as necessary
 
 function Dashboard() {
-  const { auth } = useContext(AuthContext);
+  const { username } = useContext(AuthContext); // Correctly destructure 'username'
+  
+  // Optional: Handle cases where 'username' might still be undefined
+  if (!username) {
+    return <div className="error">User information is missing.</div>;
+  }
 
   return (
-    <div>
-      <h1>Welcome, {auth.username}!</h1>
-      {/* Add dashboard content here */}
+    <div className="dashboard-container">
+      <h1>Welcome, {username}!</h1>
+      {/* Add more dashboard content here */}
     </div>
   );
 }

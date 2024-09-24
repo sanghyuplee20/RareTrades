@@ -1,5 +1,3 @@
-// LoginForm.js
-
 import React, { useState, useContext } from 'react';
 import './LoginForm.css';
 import { Link, useNavigate } from 'react-router-dom';
@@ -11,11 +9,15 @@ function LoginForm() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate(); // Hook for navigation
 
-  const { setAuth } = useContext(AuthContext);
+  const { login } = useContext(AuthContext); // Use 'login' function from context
+
+  // State for handling errors
+  const [error, setError] = useState(null);
 
   // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent default form submission behavior
+    setError(null); // Reset previous errors
 
     try {
       const response = await fetch('http://localhost:4000/api/login', {
@@ -30,31 +32,24 @@ function LoginForm() {
 
       console.log('Server response:', result); // Debugging
 
-      if (response.ok) {
+      if (response.ok && result.success) {
         // Successful login
         console.log(result.message); // e.g., "Login successful"
         console.log(`Welcome ${result.username}`);
 
-        // Store the token in localStorage
-        localStorage.setItem('token', result.token);
-        localStorage.setItem('username', result.username);
-
-        // Update the auth context
-        setAuth({
-          token: result.token,
-          username: result.username,
-        });
+        // Use the login function from AuthContext to update authentication state
+        login(result.token, result.username);
 
         // Redirect to a protected route or homepage
         navigate('/dashboard'); // Adjust the path as needed
       } else {
         // Handle login failure (invalid credentials or other errors)
         console.log(result.message); // e.g., "Invalid credentials"
-        alert(result.message); // Display error message to the user
+        setError(result.message || 'Login failed. Please try again.');
       }
     } catch (error) {
       console.error('Error during login:', error.message || error);
-      alert('An error occurred during login. Please try again.');
+      setError('An error occurred during login. Please try again.');
     }
   };
 
@@ -62,6 +57,8 @@ function LoginForm() {
     <div className="loginform">
       <form onSubmit={handleSubmit}>
         <h1 className="logo">RareTrades</h1>
+
+        {error && <div className="error-message">{error}</div>} {/* Display error message */}
 
         <div className="login--input-box">
           <input
@@ -89,7 +86,10 @@ function LoginForm() {
           <label>
             <input type="checkbox" /> Remember me
           </label>
-          <a href="#">Forgot password?</a>
+          {/* Replace <a> with <Link> */}
+          <Link to="/forgot-password" className="forgot-password-link">
+            Forgot password?
+          </Link>
         </div>
 
         <div className="login--register">

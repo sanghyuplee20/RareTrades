@@ -1,29 +1,44 @@
-// AuthContext.js
-
 import React, { createContext, useState, useEffect } from 'react';
 
+// Create the AuthContext
 export const AuthContext = createContext();
 
+// AuthProvider component to wrap around your app
 export function AuthProvider({ children }) {
-  const [auth, setAuth] = useState({
-    token: localStorage.getItem('token'),
-    username: localStorage.getItem('username'),
-  });
+  // Initialize state from localStorage
+  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [username, setUsername] = useState(localStorage.getItem('username'));
 
+  // Derive authentication status
+  const isAuthenticated = !!token;
+
+  // Effect to synchronize state with localStorage
   useEffect(() => {
-    console.log('Auth state updated:', auth); // Debugging
+    console.log('Auth state updated:', { token, username }); // Debugging
 
-    if (auth.token && auth.username) {
-      localStorage.setItem('token', auth.token);
-      localStorage.setItem('username', auth.username);
+    if (token && username) {
+      localStorage.setItem('token', token);
+      localStorage.setItem('username', username);
     } else {
       localStorage.removeItem('token');
       localStorage.removeItem('username');
     }
-  }, [auth]);
+  }, [token, username]);
+
+  // Function to handle login
+  const login = (newToken, newUsername) => {
+    setToken(newToken);
+    setUsername(newUsername);
+  };
+
+  // Function to handle logout
+  const logout = () => {
+    setToken(null);
+    setUsername(null);
+  };
 
   return (
-    <AuthContext.Provider value={{ auth, setAuth }}>
+    <AuthContext.Provider value={{ isAuthenticated, token, username, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

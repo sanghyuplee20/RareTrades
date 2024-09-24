@@ -1,18 +1,18 @@
+// src/Navbar.js
+
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from './pages/AuthContext'; // Adjust the path based on your directory structure
 import './Navbar.css';
 
 export default function Navbar() {
-  const { auth, setAuth } = useContext(AuthContext);
+  const { isAuthenticated, username, logout } = useContext(AuthContext);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    setAuth({ token: null, username: null });
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
+    logout();
     setDropdownOpen(false); // Close dropdown on logout
     navigate('/login'); // Redirect to login page after logout
   };
@@ -36,7 +36,7 @@ export default function Navbar() {
     };
   }, [dropdownOpen]);
 
-  console.log('Navbar auth:', auth); // Debugging
+  console.log('Navbar auth:', { isAuthenticated, username }); // Debugging
 
   return (
     <nav>
@@ -49,7 +49,7 @@ export default function Navbar() {
           <Link to="/recommendation">Recommendations</Link>
         </li>
 
-        {auth.token ? (
+        {isAuthenticated ? (
           <>
             <li>
               <Link to="/search">Search</Link>
@@ -65,7 +65,7 @@ export default function Navbar() {
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 className="username"
               >
-                {auth.username}
+                {username}
               </span>
               {dropdownOpen && (
                 <ul className="dropdown-menu">

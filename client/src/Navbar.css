@@ -5,7 +5,7 @@ nav {
     justify-content: space-between;
     align-items: center;
     padding: 30px 10px;
-    border-bottom: 1px solid black;
+    border-bottom: 2px solid black;
     box-sizing: border-box;
     position: fixed;
     top: 0;

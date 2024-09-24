@@ -1,34 +1,133 @@
-/* components/CardItem.css */
+/* 1. Global Box Sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
 
+/* 2. Card Container */
 .card-item {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 10px;
-    text-align: center;
-    transition: box-shadow 0.2s, transform 0.2s;
-    background-color: #f9f9f9;
-    width: 200px; /* Adjust as needed */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  transition: box-shadow 0.2s, transform 0.2s;
+  background-color: #f9f9f9;
+  width: 200px; /* Fixed width */
+  max-width: 100%; /* Ensures responsiveness */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden; /* Prevents child elements from overflowing */
+}
+
+/* Hover Effect */
+.card-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+}
+
+/* 3. Thumbnail Image */
+.card-thumbnail {
+  width: 100%;            /* Full width of the container */
+  height: auto;           /* Auto height to maintain aspect ratio */
+  object-fit: contain;    /* Ensures the entire image is visible */
+  border-radius: 4px;
+  margin-bottom: 10px;    /* Space below the image */
+}
+
+/* 4. Card Name */
+.card-name {
+  font-size: 18px;
+  margin: 10px 0 5px 0;
+  font-family: "Pixelify Sans", sans-serif;
+  width: 100%;             /* Full width */
+  word-wrap: break-word;   /* Allows text to wrap to the next line */
+  overflow: hidden;        /* Hides any overflowing text */
+  text-overflow: ellipsis; /* Adds ellipsis (...) for overflowing text */
+  white-space: nowrap;     /* Prevents text from wrapping to multiple lines */
+}
+
+/* 5. Card Price */
+.card-price {
+  font-size: 16px;
+  color: #555;
+  width: 100%;             /* Full width */
+  word-wrap: break-word;   /* Allows text to wrap to the next line */
+  overflow: hidden;        /* Hides any overflowing text */
+  text-overflow: ellipsis; /* Adds ellipsis (...) for overflowing text */
+  white-space: nowrap;     /* Prevents text from wrapping to multiple lines */
+}
+
+/* 6. Card Views */
+.card-views {
+  font-size: 14px;
+  color: #777;
+  width: 100%;             /* Full width */
+  word-wrap: break-word;   /* Allows text to wrap to the next line */
+  overflow: hidden;        /* Hides any overflowing text */
+  text-overflow: ellipsis; /* Adds ellipsis (...) for overflowing text */
+  white-space: nowrap;     /* Prevents text from wrapping to multiple lines */
+}
+
+/* 7. Parent Containers (Rec.css) */
+.rec-container {
+  padding: 100px 20px 50px 20px; /* Adjust top padding for fixed navbar */
+  max-width: 100%;                /* Prevents container from exceeding viewport */
+  overflow: hidden;               /* Hides any overflowing content */
+}
+
+.banner {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.banner img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.card-section {
+  margin-bottom: 40px;
+}
+
+.card-section h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-family: "Pixelify Sans", sans-serif;
+}
+
+/* 8. Card Grid */
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  max-width: 100%; /* Prevent exceeding viewport */
+}
+
+/* 9. Card Links */
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s;
+}
+
+.card-link:hover {
+  transform: scale(1.05);
+}
+
+/* 10. Responsive Design */
+@media (max-width: 600px) {
+  .card-item {
+      width: 100%;          /* Full width on small screens */
+      max-width: 300px;     /* Optional: set max-width */
   }
-  
-  .card-item:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    transform: translateY(-5px);
-  }
-  
+
   .card-thumbnail {
-    max-width: 100%;
-    height: auto;
-    border-radius: 4px;
+      /* No fixed height, image scales naturally */
   }
-  
-  .card-name {
-    font-size: 18px;
-    margin: 10px 0 5px 0;
-    font-family: "Pixelify Sans", sans-serif;
+
+  .rec-container {
+      padding: 50px 10px;   /* Adjust padding for smaller screens */
   }
-  
-  .card-price {
-    font-size: 16px;
-    color: #555;
-  }
-  
+}

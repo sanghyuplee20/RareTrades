@@ -6,10 +6,14 @@ import './CardItem.css';
 function CardItem({ card }) {
   return (
     <div className="card-item">
-      <img src={card.image_url || '/default-image.png'} alt={card.name} />
-      <h4>{card.name}</h4>
-      <p>Price: ${card.price}</p>
-      <p>Views: {card.views}</p>
+      <img
+        src={card.image_url || '/default-image.png'}
+        alt={card.name}
+        className="card-thumbnail"
+      />
+      <h4 className="card-name">{card.name}</h4>
+      <p className="card-price">Price: ${card.price}</p>
+      <p className="card-views">Views: {card.views}</p>
     </div>
   );
 }
